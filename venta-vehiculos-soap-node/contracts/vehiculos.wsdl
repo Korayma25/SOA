@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions
+    xmlns="http://schemas.xmlsoap.org/wsdl/"
+    xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+    xmlns:tns="http://uta.edu.ec/vehiculos"
+    targetNamespace="http://uta.edu.ec/vehiculos"
+    name="VehiculoService">
+
+  <types>
+    <xsd:schema
+        targetNamespace="http://uta.edu.ec/vehiculos"
+        xmlns:tns="http://uta.edu.ec/vehiculos"
+        elementFormDefault="qualified">
+
+  <xsd:simpleType name="EstadoVehiculoType">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="DISPONIBLE"/>
+      <xsd:enumeration value="VENDIDO"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+
+  <xsd:simpleType name="ChasisType">
+    <xsd:restriction base="xsd:string">
+      <xsd:length value="17"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+
+  <xsd:simpleType name="AnioVehiculoType">
+    <xsd:restriction base="xsd:int">
+      <xsd:minInclusive value="1900"/>
+      <xsd:maxInclusive value="2100"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+
+  <xsd:simpleType name="PrecioType">
+    <xsd:restriction base="xsd:decimal">
+      <xsd:minExclusive value="0"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+
+  <xsd:complexType name="VehiculoType">
+    <xsd:sequence>
+      <xsd:element name="idVehiculo" type="xsd:int" minOccurs="0"/>
+      <xsd:element name="marca" type="xsd:string"/>
+      <xsd:element name="modelo" type="xsd:string"/>
+      <xsd:element name="placa" type="xsd:string"/>
+      <xsd:element name="chasis" type="tns:ChasisType"/>
+      <xsd:element name="anio" type="tns:AnioVehiculoType"/>
+      <xsd:element name="color" type="xsd:string" minOccurs="0"/>
+      <xsd:element name="precio" type="tns:PrecioType"/>
+      <xsd:element name="estado" type="tns:EstadoVehiculoType" minOccurs="0"/>
+    </xsd:sequence>
+  </xsd:complexType>
+
+  <xsd:complexType name="ListaVehiculosType">
+    <xsd:sequence>
+      <xsd:element name="vehiculo" type="tns:VehiculoType" minOccurs="0" maxOccurs="unbounded"/>
+    </xsd:sequence>
+  </xsd:complexType>
+
+  <xsd:complexType name="ServicioFaultType">
+    <xsd:sequence>
+      <xsd:element name="codigo" type="xsd:string"/>
+      <xsd:element name="mensaje" type="xsd:string"/>
+    </xsd:sequence>
+  </xsd:complexType>
+
+  <xsd:element name="ListarVehiculosRequest" type="xsd:anyType"/>
+  <xsd:element name="ListarVehiculosResponse">
+    <xsd:complexType><xsd:sequence>
+      <xsd:element name="vehiculos" type="tns:ListaVehiculosType"/>
+    </xsd:sequence></xsd:complexType>
+  </xsd:element>
+
+  <xsd:element name="BuscarVehiculoRequest">
+    <xsd:complexType><xsd:sequence>
+      <xsd:element name="idVehiculo" type="xsd:int"/>
+    </xsd:sequence></xsd:complexType>
+  </xsd:element>
+  <xsd:element name="BuscarVehiculoResponse">
+    <xsd:complexType><xsd:sequence>
+      <xsd:element name="vehiculo" type="tns:VehiculoType"/>
+    </xsd:sequence></xsd:complexType>
+  </xsd:element>
+
+  <xsd:element name="BuscarVehiculosPorMarcaRequest">
+    <xsd:complexType><xsd:sequence>
+      <xsd:element name="marca" type="xsd:string"/>
+    </xsd:sequence></xsd:complexType>
+  </xsd:element>
+  <xsd:element name="BuscarVehiculosPorMarcaResponse">
+    <xsd:complexType><xsd:sequence>
+      <xsd:element name="vehiculos" type="tns:ListaVehiculosType"/>
+    </xsd:sequence></xsd:complexType>
+  </xsd:element>
+
+  <xsd:element name="CrearVehiculoRequest">
+    <xsd:complexType><xsd:sequence>
+      <xsd:element name="vehiculo" type="tns:VehiculoType"/>
+    </xsd:sequence></xsd:complexType>
+  </xsd:element>
+  <xsd:element name="CrearVehiculoResponse">
+    <xsd:complexType><xsd:sequence>
+      <xsd:element name="vehiculo" type="tns:VehiculoType"/>
+      <xsd:element name="mensaje" type="xsd:string"/>
+    </xsd:sequence></xsd:complexType>
+  </xsd:element>
+
+  <xsd:element name="ActualizarVehiculoRequest">
+    <xsd:complexType><xsd:sequence>
+      <xsd:element name="idVehiculo" type="xsd:int"/>
+      <xsd:element name="vehiculo" type="tns:VehiculoType"/>
+    </xsd:sequence></xsd:complexType>
+  </xsd:element>
+  <xsd:element name="ActualizarVehiculoResponse">
+    <xsd:complexType><xsd:sequence>
+      <xsd:element name="vehiculo" type="tns:VehiculoType"/>
+      <xsd:element name="mensaje" type="xsd:string"/>
+    </xsd:sequence></xsd:complexType>
+  </xsd:element>
+
+  <xsd:element name="EliminarVehiculoRequest">
+    <xsd:complexType><xsd:sequence>
+      <xsd:element name="idVehiculo" type="xsd:int"/>
+    </xsd:sequence></xsd:complexType>
+  </xsd:element>
+  <xsd:element name="EliminarVehiculoResponse">
+    <xsd:complexType><xsd:sequence>
+      <xsd:element name="success" type="xsd:boolean"/>
+      <xsd:element name="mensaje" type="xsd:string"/>
+    </xsd:sequence></xsd:complexType>
+  </xsd:element>
+
+  <xsd:element name="ServicioFault" type="tns:ServicioFaultType"/>
+
+    </xsd:schema>
+  </types>
+
+  <message name="ListarVehiculosInput"><part name="parameters" element="tns:ListarVehiculosRequest"/></message>
+  <message name="ListarVehiculosOutput"><part name="parameters" element="tns:ListarVehiculosResponse"/></message>
+  <message name="BuscarVehiculoInput"><part name="parameters" element="tns:BuscarVehiculoRequest"/></message>
+  <message name="BuscarVehiculoOutput"><part name="parameters" element="tns:BuscarVehiculoResponse"/></message>
+  <message name="BuscarVehiculosPorMarcaInput"><part name="parameters" element="tns:BuscarVehiculosPorMarcaRequest"/></message>
+  <message name="BuscarVehiculosPorMarcaOutput"><part name="parameters" element="tns:BuscarVehiculosPorMarcaResponse"/></message>
+  <message name="CrearVehiculoInput"><part name="parameters" element="tns:CrearVehiculoRequest"/></message>
+  <message name="CrearVehiculoOutput"><part name="parameters" element="tns:CrearVehiculoResponse"/></message>
+  <message name="ActualizarVehiculoInput"><part name="parameters" element="tns:ActualizarVehiculoRequest"/></message>
+  <message name="ActualizarVehiculoOutput"><part name="parameters" element="tns:ActualizarVehiculoResponse"/></message>
+  <message name="EliminarVehiculoInput"><part name="parameters" element="tns:EliminarVehiculoRequest"/></message>
+  <message name="EliminarVehiculoOutput"><part name="parameters" element="tns:EliminarVehiculoResponse"/></message>
+  <message name="ServicioFaultMessage"><part name="fault" element="tns:ServicioFault"/></message>
+
+  <portType name="VehiculoPortType">
+    <operation name="ListarVehiculos">
+      <input message="tns:ListarVehiculosInput"/><output message="tns:ListarVehiculosOutput"/>
+      <fault name="ServicioFault" message="tns:ServicioFaultMessage"/>
+    </operation>
+    <operation name="BuscarVehiculo">
+      <input message="tns:BuscarVehiculoInput"/><output message="tns:BuscarVehiculoOutput"/>
+      <fault name="ServicioFault" message="tns:ServicioFaultMessage"/>
+    </operation>
+    <operation name="BuscarVehiculosPorMarca">
+      <input message="tns:BuscarVehiculosPorMarcaInput"/><output message="tns:BuscarVehiculosPorMarcaOutput"/>
+      <fault name="ServicioFault" message="tns:ServicioFaultMessage"/>
+    </operation>
+    <operation name="CrearVehiculo">
+      <input message="tns:CrearVehiculoInput"/><output message="tns:CrearVehiculoOutput"/>
+      <fault name="ServicioFault" message="tns:ServicioFaultMessage"/>
+    </operation>
+    <operation name="ActualizarVehiculo">
+      <input message="tns:ActualizarVehiculoInput"/><output message="tns:ActualizarVehiculoOutput"/>
+      <fault name="ServicioFault" message="tns:ServicioFaultMessage"/>
+    </operation>
+    <operation name="EliminarVehiculo">
+      <input message="tns:EliminarVehiculoInput"/><output message="tns:EliminarVehiculoOutput"/>
+      <fault name="ServicioFault" message="tns:ServicioFaultMessage"/>
+    </operation>
+  </portType>
+
+  <binding name="VehiculoBinding" type="tns:VehiculoPortType">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <operation name="ListarVehiculos"><soap:operation soapAction="ListarVehiculos"/><input><soap:body use="literal"/></input><output><soap:body use="literal"/></output><fault name="ServicioFault"><soap:fault name="ServicioFault" use="literal"/></fault></operation>
+    <operation name="BuscarVehiculo"><soap:operation soapAction="BuscarVehiculo"/><input><soap:body use="literal"/></input><output><soap:body use="literal"/></output><fault name="ServicioFault"><soap:fault name="ServicioFault" use="literal"/></fault></operation>
+    <operation name="BuscarVehiculosPorMarca"><soap:operation soapAction="BuscarVehiculosPorMarca"/><input><soap:body use="literal"/></input><output><soap:body use="literal"/></output><fault name="ServicioFault"><soap:fault name="ServicioFault" use="literal"/></fault></operation>
+    <operation name="CrearVehiculo"><soap:operation soapAction="CrearVehiculo"/><input><soap:body use="literal"/></input><output><soap:body use="literal"/></output><fault name="ServicioFault"><soap:fault name="ServicioFault" use="literal"/></fault></operation>
+    <operation name="ActualizarVehiculo"><soap:operation soapAction="ActualizarVehiculo"/><input><soap:body use="literal"/></input><output><soap:body use="literal"/></output><fault name="ServicioFault"><soap:fault name="ServicioFault" use="literal"/></fault></operation>
+    <operation name="EliminarVehiculo"><soap:operation soapAction="EliminarVehiculo"/><input><soap:body use="literal"/></input><output><soap:body use="literal"/></output><fault name="ServicioFault"><soap:fault name="ServicioFault" use="literal"/></fault></operation>
+  </binding>
+
+  <service name="VehiculoService">
+    <documentation>Servicio SOAP para gestión de vehículos</documentation>
+    <port name="VehiculoPort" binding="tns:VehiculoBinding">
+      <soap:address location="http://localhost:8000/soap/vehiculos"/>
+    </port>
+  </service>
+</definitions>
